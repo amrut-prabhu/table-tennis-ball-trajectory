@@ -7,11 +7,12 @@
 %   x (double): x coordinate of the center of the ball streak in the frame.
 %   y (double): y coordinate of the center of the ball streak in the frame.
 function [x, y] = getCentreOfBallStreak(window, startX, startY)
-fprintf("In function getCentreOfBallStreak()\n");
+% fprintf("In function getCentreOfBallStreak()\n");
 
 % ================================Constants================================
 % Threshold used to classify a pixel as belonging to the streak of the ball
 BALL_PIXEL_THRESHOLD = 10;
+
 % Dimensions of window
 [HEIGHT, WIDTH] = size(window);
 
@@ -27,7 +28,7 @@ maxX = find(maxOfCols > BALL_PIXEL_THRESHOLD, 1, 'last');
 minY = find(maxOfRows > BALL_PIXEL_THRESHOLD, 1, 'first');
 maxY = find(maxOfRows > BALL_PIXEL_THRESHOLD, 1, 'last');
 
-fprintf("x=%d,%d y=%d,%d\n",minX,maxX,minY,maxY);
+% fprintf("x=%d,%d y=%d,%d\n",minX,maxX,minY,maxY);
 
 % x = (startX + (startX + WIDTH-1)) / 2;
 % y = (startY + (startY + HEIGHT-1)) / 2;
