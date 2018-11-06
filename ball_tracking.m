@@ -1,7 +1,7 @@
 close all;
 clear all;
-%{
-for cam = 1:3
+
+for cam = 1:1
     dirPath = sprintf('Videos/CAM%d/', cam);
     fileType = '*.mp4';
     dirName = sprintf('%s', dirPath, fileType);
@@ -15,6 +15,6 @@ for cam = 1:3
         processVideoFile(pathToFile);
     end
 end
-%}
 
-processVideoFile('Videos/CAM1/CAM1-GOPR0333-21157.mp4');
+
+% processVideoFile('Videos/CAM1/CAM1-GOPR0333-21157.mp4');

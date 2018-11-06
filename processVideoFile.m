@@ -33,17 +33,17 @@ if ~exist(backgroundFile, 'file')
 	imwrite(videoBackground, backgroundFile, 'png');
 else
     fprintf("Loading background from disk\n");
-    videoBackground = imread(backgroundFile); 
+    videoBackground = double(imread(backgroundFile)); 
 end
 
 for frameNum = 1 : NUM_FRAMES
     % Read video frame and convert to image
-    vidFrame = read(videoObj, frameNum);
+    vidFrame = double(read(videoObj, frameNum));
     
     % Get moving objects in this frame
-    movingObjects = vidFrame - videoBackground;
+    movingObjects = abs(vidFrame - videoBackground);
     % diff = uint8(movingObjects);
-    movingObjectsGrayscale = rgb2gray(movingObjects);
+    movingObjectsGrayscale = rgb2gray(uint8(movingObjects));
 
     [x, y] = getBallPosition(movingObjectsGrayscale);
     
@@ -57,7 +57,7 @@ for frameNum = 1 : NUM_FRAMES
     
     % Write ball position to csv file
     posCsvEntry = strcat(int2str(frameNum-1), DELIMITER, x, DELIMITER, y, '\n');
-    fprintf(posCsvEntry);
+    %fprintf(posCsvEntry);
     fprintf(csvFileObj,posCsvEntry);
     
     

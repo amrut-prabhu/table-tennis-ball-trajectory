@@ -12,7 +12,7 @@ function[ballX, ballY] = getBallPosition(frame)
 
 % ================================Constants================================
 % Threshold used to classify a window as containing the streak of the moving ball 
-BALL_THRESHOLD = 40; 
+BALL_THRESHOLD = 16; 
 
 % Threshold used to classify a window as an empty window, i.e., no movement is captured in the window
 EMPTY_THRESHOLD = 2; 
@@ -87,9 +87,9 @@ while y < FRAME_HEIGHT-WINDOW_HEIGHT
             end
             
             return;
-        elseif (avgPixelValue < EMPTY_THRESHOLD)
-            % Speed optimisation: Increment by a large amount
-            x = x + WINDOW_WIDTH*0.75;
+         elseif (avgPixelValue < EMPTY_THRESHOLD)
+             % Speed optimisation: Increment by a large amount
+             x = x + WINDOW_WIDTH*0.75;
         end
         
     end

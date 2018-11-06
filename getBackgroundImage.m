@@ -11,7 +11,7 @@ fprintf("In function getBackgroundImage()\n");
 % TODO: Consider using the first frame of the video as the background since
 % it usually does not contain the moving table tennis ball i.e. HARDCODING!
 for frameNum = 1 : numberOfFrames
-    vidFrame = read(videoObj, frameNum);
+    vidFrame = double(read(videoObj, frameNum));
     image(vidFrame);
     
     if frameNum == 1
