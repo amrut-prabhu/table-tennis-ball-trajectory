@@ -12,12 +12,15 @@ videoObj = VideoReader(videoFilename);
 
 % ================================Constants================================
 NUM_FRAMES = videoObj.NumberOfFrames;
+
 %CSV File Particulars
 FILENAME = strcat(videoFilename, '.csv');;
 DELIMITER = ',';
 HEADER1 = 'frame';
 HEADER2 = 'x';
 HEADER3 = "y";
+
+NOT_FOUND = '-1.0';
 
 % ===========================Logic/Implementation==========================
 csvFileObj = fopen(FILENAME,'w');
@@ -56,10 +59,17 @@ for frameNum = 1 : NUM_FRAMES
     % fprintf("Frame %d, ball = (%f,%f)\n", frameNum, x, y);
     
     % Write ball position to csv file
-    posCsvEntry = strcat(int2str(frameNum-1), DELIMITER, x, DELIMITER, y, '\n');
     %fprintf(posCsvEntry);
-    fprintf(csvFileObj,posCsvEntry);
+
+    if strcmp(x, NOT_FOUND) && strcmp(y, NOT_FOUND)
+        posCsvEntry = strcat(int2str(frameNum-1), DELIMITER, DELIMITER, '\n');
+    else
+        posCsvEntry = strcat(int2str(frameNum-1), DELIMITER, x, DELIMITER, y, '\n');
+    end
     
+   % fprintf(posCsvEntry);
+
+    fprintf(csvFileObj,posCsvEntry);
     
     % TODO: Stop tracking after ball bounces
 end
