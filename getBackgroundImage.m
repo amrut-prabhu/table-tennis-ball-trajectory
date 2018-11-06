@@ -12,7 +12,6 @@ fprintf("In function getBackgroundImage()\n");
 % it usually does not contain the moving table tennis ball i.e. HARDCODING!
 for frameNum = 1 : numberOfFrames
     vidFrame = double(read(videoObj, frameNum));
-    image(vidFrame);
     
     if frameNum == 1
         background = vidFrame;
