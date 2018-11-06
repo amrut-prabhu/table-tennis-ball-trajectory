@@ -17,5 +17,6 @@ clear all;
 %     end
 % end
 
-[xPositions, yPositions] =  processVideoFile('Videos/CAM1/CAM1-GOPR0333-21157.mp4');
+pathToFile = 'Videos/CAM1/CAM1-GOPR0333-21157.mp4';
+[xPositions, yPositions] =  processVideoFile(pathToFile);
 showTrackedBall(pathToFile, xPositions, yPositions);

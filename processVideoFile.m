@@ -11,8 +11,6 @@ fprintf("In function processVideoFile()\n");
 
 
 videoObj = VideoReader(videoFilename);
-xPositions = [];
-yPositions = [];
 
 % ================================Constants================================
 NUM_FRAMES = videoObj.NumberOfFrames;
@@ -25,7 +23,6 @@ HEADER2 = 'x';
 HEADER3 = "y";
 
 NOT_FOUND = -1.0;
-PREV_Y = -2.0;
 
 % ===========================Logic/Implementation==========================
 csvFileObj = fopen(FILENAME,'w');
@@ -43,8 +40,15 @@ else
     fprintf("Loading background from disk\n");
     videoBackground = double(imread(backgroundFile)); 
 end
-hasDipped = false;
 
+% Variables to determine when to stop tracking (i.e. once the ball bounces)
+prevY = -2.0;
+yMin = videoObj.Height; % Represents top most point of the ball (smaller value is higher position since +ve y axis is downwards)
+hasDipped = false;
+hasBounced = false;
+
+xPositions = zeros(NUM_FRAMES);
+yPositions = zeros(NUM_FRAMES);
 for frameNum = 1 : NUM_FRAMES
     % Read video frame and convert to image
     vidFrame = double(read(videoObj, frameNum));
@@ -53,27 +57,36 @@ for frameNum = 1 : NUM_FRAMES
     movingObjects = abs(vidFrame - videoBackground);
     % diff = uint8(movingObjects);
     movingObjectsGrayscale = rgb2gray(uint8(movingObjects));
+    
+    if hasBounced
+        x = NOT_FOUND;
+        y = NOT_FOUND;
+    else
+        [x, y] = getBallPosition(movingObjectsGrayscale);
+     
+        if y > 0 && yMin > y && ~hasDipped
+            yMin = y;
+        end
 
-    [x, y] = getBallPosition(movingObjectsGrayscale);
-    
+        if y - yMin > 10
+            hasDipped = true;
+        end
 
-%     if y < PREV_Y
-%         hasDipped = true; 
-%     else
-%         if hasDipped
-%             x = NOT_FOUND;
-%             y = NOT_FOUND;
-%         end
-%     end
+        if y+2 < prevY && hasDipped
+            hasBounced = true;
+            x = NOT_FOUND;
+            y = NOT_FOUND;
+        end
+    end
     
-    xPositions(end+1) = x;
-    yPositions(end+1) = y;
+    prevY = y;
     
-    PREV_Y = y;
+    xPositions(frameNum) = x;
+    yPositions(frameNum) = y;
+    
     x = sprintf('%4.1f',x);
     y = sprintf('%4.1f',y);
-
-
+    
     if strcmp(x, sprintf('%4.1f',NOT_FOUND)) && strcmp(y, sprintf('%4.1f',NOT_FOUND))
         posCsvEntry = strcat(int2str(frameNum-1), DELIMITER, DELIMITER, '\n');
     else
