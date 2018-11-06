@@ -24,7 +24,8 @@ HEADER1 = 'frame';
 HEADER2 = 'x';
 HEADER3 = "y";
 
-NOT_FOUND = '-1.0';
+NOT_FOUND = -1.0;
+PREV_Y = -2.0;
 
 % ===========================Logic/Implementation==========================
 csvFileObj = fopen(FILENAME,'w');
@@ -37,11 +38,12 @@ fprintf(csvFileObj,headersCsvEntry);
 backgroundFile = strcat(videoFilename, 'background.png');
 if ~exist(backgroundFile, 'file')
     videoBackground = getBackgroundImage(videoObj, NUM_FRAMES);
-	imwrite(videoBackground, backgroundFile, 'png');
+	imwrite(uint8(videoBackground), backgroundFile, 'png');
 else
     fprintf("Loading background from disk\n");
     videoBackground = double(imread(backgroundFile)); 
 end
+hasDipped = false;
 
 for frameNum = 1 : NUM_FRAMES
     % Read video frame and convert to image
@@ -54,28 +56,31 @@ for frameNum = 1 : NUM_FRAMES
 
     [x, y] = getBallPosition(movingObjectsGrayscale);
     
-    if frameNum > 50 && x == -1 && y == -1
-        break;
-    end
+
+%     if y < PREV_Y
+%         hasDipped = true; 
+%     else
+%         if hasDipped
+%             x = NOT_FOUND;
+%             y = NOT_FOUND;
+%         end
+%     end
     
     xPositions(end+1) = x;
     yPositions(end+1) = y;
     
+    PREV_Y = y;
     x = sprintf('%4.1f',x);
     y = sprintf('%4.1f',y);
-    % fprintf("Frame %d, ball = (%f,%f)\n", frameNum, x, y);
-    
-    % Write ball position to csv file
-    %fprintf(posCsvEntry);
 
-    if strcmp(x, NOT_FOUND) && strcmp(y, NOT_FOUND)
+
+    if strcmp(x, sprintf('%4.1f',NOT_FOUND)) && strcmp(y, sprintf('%4.1f',NOT_FOUND))
         posCsvEntry = strcat(int2str(frameNum-1), DELIMITER, DELIMITER, '\n');
     else
         posCsvEntry = strcat(int2str(frameNum-1), DELIMITER, x, DELIMITER, y, '\n');
     end
     
-   % fprintf(posCsvEntry);
-
+    fprintf(posCsvEntry);
     fprintf(csvFileObj,posCsvEntry);
     
     % TODO: Stop tracking after ball bounces
