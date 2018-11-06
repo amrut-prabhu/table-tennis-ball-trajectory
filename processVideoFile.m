@@ -18,7 +18,7 @@ yPositions = [];
 NUM_FRAMES = videoObj.NumberOfFrames;
 
 %CSV File Particulars
-FILENAME = strcat(videoFilename, '.csv');;
+FILENAME = strcat(videoFilename, '.csv');
 DELIMITER = ',';
 HEADER1 = 'frame';
 HEADER2 = 'x';
@@ -45,7 +45,7 @@ else
 end
 hasDipped = false;
 
-for frameNum = 1 : NUM_FRAMES
+for frameNum = 1 : 20
     % Read video frame and convert to image
     vidFrame = double(read(videoObj, frameNum));
     
@@ -69,7 +69,7 @@ for frameNum = 1 : NUM_FRAMES
     xPositions(end+1) = x;
     yPositions(end+1) = y;
     
-    PREV_Y = y;
+
     x = sprintf('%4.1f',x);
     y = sprintf('%4.1f',y);
 
