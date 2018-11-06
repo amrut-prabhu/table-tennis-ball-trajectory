@@ -3,12 +3,16 @@
 % Input:
 %   videoFilename (char): Relative path to the video file.
 % Output:
-%   None, but writes csv file to disk containing coordinates of the ball
-function processVideoFile(videoFilename)
+%   xPositions ():
+%   yPositions ():
+%   Writes csv file to disk containing coordinates of the ball
+function [xPositions, yPositions] = processVideoFile(videoFilename)
 fprintf("In function processVideoFile()\n");
 
 
 videoObj = VideoReader(videoFilename);
+xPositions = [];
+yPositions = [];
 
 % ================================Constants================================
 NUM_FRAMES = videoObj.NumberOfFrames;
@@ -53,6 +57,9 @@ for frameNum = 1 : NUM_FRAMES
     if frameNum > 50 && x == -1 && y == -1
         break;
     end
+    
+    xPositions(end+1) = x;
+    yPositions(end+1) = y;
     
     x = sprintf('%4.1f',x);
     y = sprintf('%4.1f',y);

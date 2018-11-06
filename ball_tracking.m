@@ -12,9 +12,11 @@ for cam = 1:1
         pathToFile = strcat(dirPath, filename);
         fprintf('Processing file %d#%d, "%s"\n', cam, k, pathToFile);
 
-        processVideoFile(pathToFile);
+        [xPositions, yPositions] = processVideoFile(pathToFile);
+        showTrackedBall(pathToFile, xPositions, yPositions);
     end
 end
+
 
 
 % processVideoFile('Videos/CAM1/CAM1-GOPR0333-21157.mp4');
