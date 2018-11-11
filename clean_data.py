@@ -1,6 +1,6 @@
 import pandas as pd
 
-fnames = ['cam1.csv', 'cam2.csv', 'cam3.csv']
+fnames = ['CAM1.csv', 'CAM2.csv', 'CAM3.csv']
 
 df1 = pd.read_csv(fnames[0])
 df1 = df1.dropna()
@@ -12,8 +12,6 @@ df3 = df3.dropna()
 f2 = df2['frame']
 f3 = df3['frame']
 commonFrames = []
-
-print (f2)
 
 for index, row in df1.iterrows():
     frameNum = row['frame']

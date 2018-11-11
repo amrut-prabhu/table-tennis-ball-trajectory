@@ -29,17 +29,15 @@ t3 = [-6.0451734755080713e-02;
     -3.9533167111966377e-01; 
     2.2979640654841407e+00];
 
-% camera pose for all three cameras
-% M1 = [R1 t1];
-% M2 = [R2 t2];
-% M3 = [R3 t3];
-
-f = {'data1.csv', 'data2.csv', 'data3.csv'};
-res = triangulate_fn(f, R1, t1, R2, t2, R3, t3);
-disp(res);
-
-% csvwrite('results.csv', res);
-scatter3(res(:, 1), res(:, 2), res(:, 3));
+for i = 0 : 9
+    figH = figure;
+    f = {strcat('CAM1-', num2str(i), '_cleaned.csv'), strcat('CAM2-', num2str(i), '_cleaned.csv'), strcat('CAM3-', num2str(i), '_cleaned.csv')};
+    res = triangulate_fn(f, R1, t1, R2, t2, R3, t3);
+    disp(res);
+    csvwrite(strcat('3dpts_', num2str(i), '.csv'), res);
+    scatter3(res(:, 1), res(:, 2), res(:, 3));
+    print(figH, '-djpeg', strcat('traj_', num2str(i), '.jpg'));
+end
 
 % Implement triangulation
 % Precondition: size(data1, 1) = size(data2, 1) = size(data3, 1)
