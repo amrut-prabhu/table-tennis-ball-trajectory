@@ -48,9 +48,9 @@ function points3D = triangulate_fn(f, R1, t1, R2, t2, R3, t3)
     P3 = get_camera_pose(R3, t3);
     
     % Read data from csv
-    points_1 = csvread(f{1}, 1, 3);
-    points_2 = csvread(f{2}, 1, 3);
-    points_3 = csvread(f{3}, 1, 3);
+    points_1 = csvread(f{1}, 1, 4);
+    points_2 = csvread(f{2}, 1, 4);
+    points_3 = csvread(f{3}, 1, 4);
     
     % Prepare the 2D points
     points_1 = prepare_2d_pos(points_1);
