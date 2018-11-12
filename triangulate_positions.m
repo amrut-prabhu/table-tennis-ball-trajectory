@@ -50,13 +50,55 @@ K3 = [872.90852997159800 0 944.45161471037636;
 for i = 0 : 9
     figH = figure;
     
-    % TODO: plot camera 
+    % Plot camera locations
+    scatter3(t1(1), t1(2), t1(3));
+    hold on;
+    scatter3(t2(1), t2(2), t2(3));
+    hold on;
+    scatter3(t3(1), t3(2), t3(3));
+    hold on;
     
+    % Plot camera 1 axes
+    plot3([t1(1) t1(1)+ R1(1, 1)], [t1(2) t1(2) + R1(1, 2)], [t1(3) t1(3) + R1(1, 3)]);
+    plot3([t1(1) t1(1)+ R1(2, 1)], [t1(2) t1(2) + R1(2, 2)], [t1(3) t1(3) + R1(2, 3)]);
+    plot3([t1(1) t1(1)+ R1(3, 1)], [t1(2) t1(2) + R1(3, 2)], [t1(3) t1(3) + R1(3, 3)]);
+    hold on;
+    
+    % Plot camera 2 axes
+    plot3([t2(1) t2(1)+ R2(1, 1)], [t2(2) t2(2) + R2(1, 2)], [t2(3) t2(3) + R2(1, 3)]);
+    plot3([t2(1) t2(1)+ R2(2, 1)], [t2(2) t2(2) + R2(2, 2)], [t2(3) t2(3) + R2(2, 3)]);
+    plot3([t2(1) t2(1)+ R2(3, 1)], [t2(2) t2(2) + R2(3, 2)], [t2(3) t2(3) + R2(3, 3)]);
+    hold on;
+    
+    % Plot camera 3 axes
+    plot3([t3(1) t3(1)+ R3(1, 1)], [t3(2) t3(2) + R3(1, 2)], [t3(3) t3(3) + R3(1, 3)]);
+    plot3([t3(1) t3(1)+ R3(2, 1)], [t3(2) t3(2) + R3(2, 2)], [t3(3) t3(3) + R3(2, 3)]);
+    plot3([t3(1) t3(1)+ R3(3, 1)], [t3(2) t3(2) + R3(3, 2)], [t3(3) t3(3) + R3(3, 3)]);
+    hold on;
+    
+    % Process points and plot a scatter plot 
     f = {strcat('CAM1-', num2str(i), '_cleaned.csv'), strcat('CAM2-', num2str(i), '_cleaned.csv'), strcat('CAM3-', num2str(i), '_cleaned.csv')};
     res = triangulate_fn(f, R1, t1, K1, R2, t2, K2, R3, t3, K3);
     disp(res);
+    
+    % Plot trajectory scatter plot
     csvwrite(strcat('3dpts_', num2str(i), '.csv'), res);
     scatter3(res(:, 1), res(:, 2), res(:, 3));
+    hold on;
+    
+    % Draw line through the plot - TODO: should fit a smooth curve, not
+    % plot
+    plot3(res(:, 1), res(:, 2), res(:, 3));
+    hold on;
+    
+    % Plot the table at lowest z value (hack) - should actually pick the
+    % first local minima for z (this occurs for bounce on table)
+    [x y] = meshgrid(-2:0.1:2);
+    tableHeight = min(res(:, 3));
+    s = surf(x, y, tableHeight + zeros(size(x)));
+    xlim([-1 2])
+    ylim([-2.5 2.5])
+    zlim([-0.5 1.5])
     print(figH, '-djpeg', strcat('traj_', num2str(i), '.jpg'));
 end
 
