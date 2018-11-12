@@ -47,10 +47,11 @@ K3 = [872.90852997159800 0 944.45161471037636;
     0 872.90852997159800 564.47334036925656;
     0 0 1];
 
-cam = plotCamera('Location', t1 ,'Orientation', R1,'Opacity', 0);
-
-for i = 0 : 0
+for i = 0 : 9
     figH = figure;
+    
+    % TODO: plot camera 
+    
     f = {strcat('CAM1-', num2str(i), '_cleaned.csv'), strcat('CAM2-', num2str(i), '_cleaned.csv'), strcat('CAM3-', num2str(i), '_cleaned.csv')};
     res = triangulate_fn(f, R1, t1, K1, R2, t2, K2, R3, t3, K3);
     disp(res);
