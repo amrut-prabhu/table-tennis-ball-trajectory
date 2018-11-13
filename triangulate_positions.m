@@ -49,7 +49,8 @@ K3 = [872.90852997159800 0 944.45161471037636;
 
 for i = 0 : 9
     figH = figure;
-    
+    results_path = fullfile(pwd, 'results');
+
     % Plot camera locations
     scatter3(t1(1), t1(2), t1(3));
     hold on;
@@ -82,18 +83,19 @@ for i = 0 : 9
     disp(res);
     
     % Plot trajectory scatter plot
-    csvwrite(strcat('3dpts_', num2str(i), '.csv'), res);
+    p = fullfile(results_path, strcat('3dpts_', num2str(i), '.csv'));
+    csvwrite(p, res);
     scatter3(res(:, 1), res(:, 2), res(:, 3));
     hold on;
     
-    % Draw line through the plot - TODO: should fit a smooth curve, not
-    % plot
+    % Draw line through the plot - TODO: should fit a smooth curve
     plot3(res(:, 1), res(:, 2), res(:, 3));
     hold on;
-    xi = smooth(res(:, 1));
-    yi = smooth(res(:, 2));
-    zi = smooth(res(:, 3));
-    plot3(xi, yi, zi, 'r') ;
+
+%     xi = smooth(res(:, 1));
+%     yi = smooth(res(:, 2));
+%     zi = smooth(res(:, 3));
+%     plot3(xi, yi, zi, 'r') ;
     
     % Plot the table at lowest z value (hack) - should actually pick the
     % first local minima for z (this occurs for bounce on table)
@@ -105,15 +107,37 @@ for i = 0 : 9
     zlim([-0.5 1.5])
     print(figH, '-djpeg', strcat('traj_', num2str(i), '.jpg'));
     
+    smooth = smoothdata(res, 1, 'sgolay', 5);
+    plot3(smooth(:, 1), smooth(:, 2), smooth(:, 3));
+    hold on;
+    
+    % Plot the table 
+    [x y] = meshgrid(-2:0.1:2);
+    tableHeight = 0.09;
+    s = surf(x, y, tableHeight + zeros(size(x)));
+    
+    % Set axes limits
+    xlim([-1 2])
+    ylim([-2.5 2.5])
+    zlim([-0.5 1.5])
+    
+    % Store trajectory
+    p = fullfile(results_path, strcat('traj_', num2str(i), '.jpg'));
+    print(figH, '-djpeg', p);
+
 end
 
 % Implement triangulation
 % Precondition: size(data1, 1) = size(data2, 1) = size(data3, 1)
 function points3D = triangulate_fn(f, R1, t1, K1, R2, t2, K2, R3, t3, K3)
     % Read data from csv
-    points_1 = csvread(f{1}, 1, 4);
-    points_2 = csvread(f{2}, 1, 4);
-    points_3 = csvread(f{3}, 1, 4);
+    data_path = fullfile(pwd, 'CleanData');  
+    p = fullfile(data_path, f{1});
+    points_1 = csvread(p, 1, 4);
+    p = fullfile(data_path, f{2});
+    points_2 = csvread(p, 1, 4);
+    p = fullfile(data_path, f{3});
+    points_3 = csvread(p, 1, 4);
     
     % Prepare the 2D points
     points_1 = prepare_2d_pos(points_1);
@@ -161,7 +185,7 @@ function points3D = triangulate_fn(f, R1, t1, K1, R2, t2, K2, R3, t3, K3)
     end
 end
 
-% Construct matrix for given point
+% Construct equation for each point
 function [mat, k1k2] = construct_mat(pt, R, t, K)
     fx = K(1, 1); % scalar
     fy = K(2, 2); % scalar
