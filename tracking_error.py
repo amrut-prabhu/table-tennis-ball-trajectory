@@ -32,6 +32,7 @@ def calculate_tracking_error(truthFile, resultFile, videoId):
 numProcessedFiles = 0;
 truthDir = "./Actual";
 z = 0;
+
 for camNum in [1, 2, 3]:
     resultDir = "./Videos/CAM" + str(camNum);
     for file in os.listdir(resultDir):
