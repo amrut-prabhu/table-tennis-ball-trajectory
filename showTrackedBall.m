@@ -3,7 +3,7 @@ videoObj = VideoReader(pathToFile);
 NUM_FRAMES = videoObj.NumberOfFrames;
 fig = figure;
 
-for frameNum = 1 : 20
+for frameNum = 1 : 100
     % Read video frame and convert to image
     vidFrame = read(videoObj, frameNum);
     imshow(vidFrame);

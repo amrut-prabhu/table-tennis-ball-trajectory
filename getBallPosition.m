@@ -12,13 +12,13 @@ function[ballX, ballY] = getBallPosition(frame)
 
 % ================================Constants================================
 % Threshold used to classify a window as containing the streak of the moving ball 
-BALL_THRESHOLD = 16; 
+BALL_THRESHOLD = 13; 
 
 % Threshold used to classify a window as an empty window, i.e., no movement is captured in the window
 EMPTY_THRESHOLD = 2; 
 
 % Dimensions of the sliding window
-WINDOW_WIDTH = 40;
+WINDOW_WIDTH = 44;
 WINDOW_HEIGHT = 25;
 
 % Dimensions of the video frame

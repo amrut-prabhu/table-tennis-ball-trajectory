@@ -1,6 +1,7 @@
 import math
 import pandas
 import os
+import numpy as np
 
 def calculate_tracking_error(truthFile, resultFile, videoId):
     truthDf = pandas.read_csv(truthFile)
@@ -8,10 +9,8 @@ def calculate_tracking_error(truthFile, resultFile, videoId):
 
     numFrames = min(len(truthDf), len(resultDf));
 
-    numXErrors = 0;
-    numYErrors = 0;
-    avgXError = 0.0;
-    avgYError = 0.0;
+    xErrors = [];
+    yErrors = [];
 
     for i in range(numFrames):
         # print(truthFile, " ", i, " ", truthDf.x[i] - resultDf.x[i], " ", truthDf.y[i] - resultDf.y[i]);
@@ -21,37 +20,22 @@ def calculate_tracking_error(truthFile, resultFile, videoId):
 
         if not math.isnan(xError) or not math.isnan(yError):
             # print(i, " ", xError, " ", yError);
-            print;
+            pass;
 
-        # Calculate average value of the errors
-        numXErrors += 1;
-        numYErrors += 1;
+        if (not math.isnan(xError)) and (not math.isnan(yError)):
+            xErrors.append(abs(xError));
+            yErrors.append(abs(yError));
 
-        if not math.isnan(xError):
-            avgXError = get_updated_error(numXErrors, xError, avgXError)
-
-        if not math.isnan(yError):
-            avgYError = get_updated_error(numYErrors, yError, avgYError)
-
-    print(videoId, ": Average x error = %.2f, Average y error = %.2f \n" % (avgXError, avgYError));
-
-
-def get_updated_error(numErrors, error, avgError):
-    if numErrors == 1:
-        avgError = math.abs(error);
-    else:
-        avgError = (((numErrors-1)/numErrors) * avgError) + ((1/numErrors) * error);
-
-    return avgError;
+    print(videoId, ": Average x error = %.2f, Average y error = %.2f \n" % (np.mean(xErrors), np.mean(yErrors)));
 
 
 numProcessedFiles = 0;
-truthDir = ".\\Truth";
-
+truthDir = "./Actual";
+z = 0;
 for camNum in [1, 2, 3]:
-    resultDir = ".\\Videos\\CAM" + str(camNum);
+    resultDir = "./Videos/CAM" + str(camNum);
     for file in os.listdir(resultDir):
-        if file.endswith(".csv"):
+        if file.endswith(".csv") and z == 0:
             pathToResultFile = os.path.join(resultDir, file);
 
             videoId = file.split(".")[0];
@@ -59,5 +43,5 @@ for camNum in [1, 2, 3]:
 
             calculate_tracking_error(pathToTruthFile, pathToResultFile, videoId);
             numProcessedFiles += 1;
-
+            z = 1;
 print("Processed ", numProcessedFiles, "files");

@@ -45,7 +45,7 @@ else
 end
 hasDipped = false;
 
-for frameNum = 1 : 20
+for frameNum = 1 : 100
     % Read video frame and convert to image
     vidFrame = double(read(videoObj, frameNum));
     
@@ -56,15 +56,6 @@ for frameNum = 1 : 20
 
     [x, y] = getBallPosition(movingObjectsGrayscale);
     
-
-%     if y < PREV_Y
-%         hasDipped = true; 
-%     else
-%         if hasDipped
-%             x = NOT_FOUND;
-%             y = NOT_FOUND;
-%         end
-%     end
     
     xPositions(end+1) = x;
     yPositions(end+1) = y;
@@ -80,7 +71,7 @@ for frameNum = 1 : 20
         posCsvEntry = strcat(int2str(frameNum-1), DELIMITER, x, DELIMITER, y, '\n');
     end
     
-    fprintf(posCsvEntry);
+    %fprintf(posCsvEntry);
     fprintf(csvFileObj,posCsvEntry);
     
     % TODO: Stop tracking after ball bounces
