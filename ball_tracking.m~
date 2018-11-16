@@ -24,6 +24,8 @@ pathToFile = 'Videos/CAM2/CAM2-GOPR0289-26776.mp4';
 [xPositions, yPositions] =  processVideoFile(pathToFile, cam);
 
 
-[xPositions, yPositions] =  processVideoFile(pathToFile);
+pathToFile = 'Videos/CAM1/CAM1-GOPR0333-21157.mp4';
+
+%[xPositions, yPositions] =  processVideoFile(pathToFile);
 %Read coordinates from csv file and show tracking
 showTrackedBall(pathToFile, xPositions, yPositions);
