@@ -46,7 +46,7 @@ imageNames = dir(fullfile(workingDir,'images','*.jpg'));
 imageNames = {imageNames.name}';
 
 baseName = pathToFile(1:find(pathToFile=='.')-1);
-outputVideo = VideoWriter(strcat(baseName,'_tracked.avi'));
+outputVideo = VideoWriter(strcat(baseName,'_tracked'), 'MPEG-4');
 outputVideo.FrameRate = videoObj.FrameRate;
 open(outputVideo)
 
