@@ -43,8 +43,9 @@ else
     fprintf("Loading background from disk\n");
     videoBackground = double(imread(backgroundFile)); 
 end
-hasDipped = false;
 
+xPositions = zeros(NUM_FRAMES);
+yPositions = zeros(NUM_FRAMES);
 for frameNum = 1 : 100
     % Read video frame and convert to image
     vidFrame = double(read(videoObj, frameNum));
@@ -56,14 +57,11 @@ for frameNum = 1 : 100
 
     [x, y] = getBallPosition(movingObjectsGrayscale);
     
-    
-    xPositions(end+1) = x;
-    yPositions(end+1) = y;
-    
+    xPositions(frameNum) = x;
+    yPositions(frameNum) = y;
 
     x = sprintf('%4.1f',x);
     y = sprintf('%4.1f',y);
-
 
     if strcmp(x, sprintf('%4.1f',NOT_FOUND)) && strcmp(y, sprintf('%4.1f',NOT_FOUND))
         posCsvEntry = strcat(int2str(frameNum-1), DELIMITER, DELIMITER, '\n');
@@ -74,7 +72,7 @@ for frameNum = 1 : 100
     %fprintf(posCsvEntry);
     fprintf(csvFileObj,posCsvEntry);
     
-    % TODO: Stop tracking after ball bounces
+    % TODO: Stop tracking after ball is out of table
 end
 
 end

@@ -1,7 +1,7 @@
 close all;
 clear all;
 
-% for cam = 1:1
+% for cam = 1:3
 %     dirPath = sprintf('Videos/CAM%d/', cam);
 %     fileType = '*.mp4';
 %     dirName = sprintf('%s', dirPath, fileType);
@@ -17,6 +17,11 @@ clear all;
 %     end
 % end
 
-[xPositions, yPositions] =  processVideoFile('Videos/CAM1/CAM1-GOPR0333-21157.mp4');
 pathToFile = 'Videos/CAM1/CAM1-GOPR0333-21157.mp4';
+
+%[xPositions, yPositions] =  processVideoFile(pathToFile);
+trackedCsv = csvread(strcat(pathToFile, '.csv'),1,0);
+xPositions = trackedCsv(:, 2);
+yPositions = trackedCsv(:, 3);
+%Read coordinates from csv file and show tracking
 showTrackedBall(pathToFile, xPositions, yPositions);
