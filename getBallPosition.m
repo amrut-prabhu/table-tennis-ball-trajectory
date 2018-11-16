@@ -7,18 +7,18 @@
 %   to top left corner
 %   ballY (double): y coordinate of the table tennis ball in the frame wrt 
 %   to top left corner (positive axis is downwards)
-function[ballX, ballY] = getBallPosition(frame)
+function[ballX, ballY] = getBallPosition(frame, cam)
 % fprintf("In function getBallPosition()\n");
 
 % ================================Constants================================
 % Threshold used to classify a window as containing the streak of the moving ball 
-BALL_THRESHOLD = 13; 
+BALL_THRESHOLD = 10; 
 
 % Threshold used to classify a window as an empty window, i.e., no movement is captured in the window
 EMPTY_THRESHOLD = 2; 
 
 % Dimensions of the sliding window
-WINDOW_WIDTH = 44;
+WINDOW_WIDTH = 40;
 WINDOW_HEIGHT = 25;
 
 % Dimensions of the video frame
@@ -27,7 +27,14 @@ WINDOW_HEIGHT = 25;
 % Coordinates from which to start searching for the ball
 START_X = 525;
 START_Y = 220;
+X_LIMIT = FRAME_WIDTH - WINDOW_WIDTH;
 
+if cam == 2
+  START_X = 600;  
+end
+if cam == 3
+    X_LIMIT = 1400;
+end
 % Logical value to decide whether the moving window should be displayed
 IS_PROCESSING_SHOWN = false;
 
@@ -45,11 +52,11 @@ ballX = -1;
 ballY = -1;
 
 y = START_Y; 
-while y < FRAME_HEIGHT-WINDOW_HEIGHT
+while y < FRAME_HEIGHT - WINDOW_HEIGHT
     % TODO: FIND A WAY TO OPTIMISE INCREMENT OF ROW (similar to col = col + windowWidth)
     y = y + 1;
     x = START_X;
-    while x < FRAME_WIDTH-WINDOW_WIDTH
+    while x < X_LIMIT
         x = x + 1;
         window = frame(y:y+WINDOW_HEIGHT, x:x+WINDOW_WIDTH);
         avgPixelValue = mean2(window);
@@ -89,6 +96,7 @@ while y < FRAME_HEIGHT-WINDOW_HEIGHT
             return;
          elseif (avgPixelValue < EMPTY_THRESHOLD)
              % Speed optimisation: Increment by a large amount
+             ballX = avgPixelValue;
              x = x + WINDOW_WIDTH*0.75;
         end
         

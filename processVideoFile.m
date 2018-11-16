@@ -6,7 +6,7 @@
 %   xPositions ():
 %   yPositions ():
 %   Writes csv file to disk containing coordinates of the ball
-function [xPositions, yPositions] = processVideoFile(videoFilename)
+function [xPositions, yPositions] = processVideoFile(videoFilename, cam)
 fprintf("In function processVideoFile()\n");
 
 
@@ -55,7 +55,7 @@ for frameNum = 1 : 100
     % diff = uint8(movingObjects);
     movingObjectsGrayscale = rgb2gray(uint8(movingObjects));
 
-    [x, y] = getBallPosition(movingObjectsGrayscale);
+    [x, y] = getBallPosition(movingObjectsGrayscale, cam);
     
     xPositions(frameNum) = x;
     yPositions(frameNum) = y;
@@ -69,7 +69,7 @@ for frameNum = 1 : 100
         posCsvEntry = strcat(int2str(frameNum-1), DELIMITER, x, DELIMITER, y, '\n');
     end
     
-    %fprintf(posCsvEntry);
+    fprintf(posCsvEntry);
     fprintf(csvFileObj,posCsvEntry);
     
     % TODO: Stop tracking after ball is out of table

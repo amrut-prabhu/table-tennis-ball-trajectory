@@ -9,7 +9,7 @@ function [areBordersEmpty] = hasEmptyBorders(window)
 % fprintf("In function hasEmptyBorders()\n");
 
 % ================================Constants================================
-BLACK_THRESHOLD = 7;
+BLACK_THRESHOLD = 10;
 [NUM_ROWS, NUM_COLS] = size(window);
 
 % ===========================Logic/Implementation==========================
