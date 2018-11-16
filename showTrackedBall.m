@@ -3,7 +3,7 @@ videoObj = VideoReader(pathToFile);
 NUM_FRAMES = videoObj.NumberOfFrames;
 fig = figure;
 
-% Read coordinates from csv file
+% Read coordinates from csv file, if exists
 csvFile = strcat(pathToFile, '.csv');
 if exist(csvFile, 'file')
     trackedCsv = csvread(csvFile,1,0);

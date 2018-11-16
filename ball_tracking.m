@@ -20,9 +20,5 @@ clear all;
 pathToFile = 'Videos/CAM1/CAM1-GOPR0333-21157.mp4';
 % [xPositions, yPositions] =  processVideoFile(pathToFile);
 
-% Read coordinates from csv file
-trackedCsv = csvread(strcat(pathToFile, '.csv'),1,0);
-xPositions = trackedCsv(:, 2);
-yPositions = trackedCsv(:, 3);
-
+% Read coordinates from csv file and show tracking
 showTrackedBall(pathToFile, xPositions, yPositions);
