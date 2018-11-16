@@ -2,20 +2,24 @@ function showTrackedBall(pathToFile, xPositions, yPositions)
 videoObj = VideoReader(pathToFile);
 NUM_FRAMES = videoObj.NumberOfFrames;
 fig = figure;
+baseName = pathToFile(1:find(pathToFile=='.')-1);
 
 % Read coordinates from csv file, if exists
-csvFile = strcat(pathToFile, '.csv');
+csvFile = strcat(baseName, '.csv');
 if exist(csvFile, 'file')
     trackedCsv = csvread(csvFile,1,0);
     xPositions = trackedCsv(:, 2);
     yPositions = trackedCsv(:, 3);
 end
 
+numTracked = size(xPositions);
+numTracked = numTracked(1);
+
 workingDir = tempname;
 mkdir(workingDir)
 mkdir(workingDir,'images')
 
-for frameNum = 1 : size(trackedCsv)
+for frameNum = 1 : NUM_FRAMES
     % Do not show warnings
     MSGID = 'images:initSize:adjustingMag';
     warning('off', MSGID);
@@ -24,8 +28,13 @@ for frameNum = 1 : size(trackedCsv)
     vidFrame = read(videoObj, frameNum);
     imshow(vidFrame);
     
-    x = xPositions(frameNum);
-    y = yPositions(frameNum);
+    if frameNum <= numTracked
+        x = xPositions(frameNum);
+        y = yPositions(frameNum);
+    else
+        x = -1;
+        y = -1;
+    end
     
     frameWithMarker = vidFrame;
     if x > 0 && y > 0
