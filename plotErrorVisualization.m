@@ -93,7 +93,7 @@ plot3([t3(1) t3(1)+ R3(3, 1)], [t3(2) t3(2) + R3(3, 2)], [t3(3) t3(3) + R3(3, 3)
 hold on;
 
 % Plot points
-scatter3(res(:, 1), res(:, 2), res(:, 3), 'MarkerEdgeColor', [0 0 0.5]);
+plot3(res(:, 1), res(:, 2), res(:, 3), 'MarkerEdgeColor', [0 0 0.5]);
 hold on;
 
 % Plot smooth curve for data points
@@ -111,7 +111,8 @@ xlim([-1 2])
 ylim([-2.5 2.5])
 zlim([-0.5 1.5])
 
-title('Trajectory');
+legend('Actual Data', 'Smooth Data')
+title('Error Analysis');
 
 % Save figure as .jpg
 p = fullfile(results_path, strcat('error_visualization_', num2str(i), '.jpg'));

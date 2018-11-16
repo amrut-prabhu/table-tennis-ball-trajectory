@@ -100,7 +100,7 @@ for i = 0 : 9
     ylim([-2.5 2.5])
     zlim([-0.5 1.5])
     
-    title('Trajectory');
+    title('Trajectory of ball');
     
     figName = strcat('Trajectory of Ball for Sequence: ', num2str(i));
     set(figH, 'NumberTitle', 'off', 'Name', figName);
