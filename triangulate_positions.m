@@ -77,54 +77,40 @@ for i = 0 : 9
     plot3([t3(1) t3(1)+ R3(3, 1)], [t3(2) t3(2) + R3(3, 2)], [t3(3) t3(3) + R3(3, 3)], 'Color', [0, 0, 255] / 255);
     hold on;
     
-    % Process points and plot a scatter plot 
+    % Get 3D points
     f = {strcat('CAM1-', num2str(i), '_cleaned.csv'), strcat('CAM2-', num2str(i), '_cleaned.csv'), strcat('CAM3-', num2str(i), '_cleaned.csv')};
     res = triangulate_fn(f, R1, t1, K1, R2, t2, K2, R3, t3, K3);
     disp(res);
     
-    % Plot trajectory scatter plot
+    % Plot trajectory scatter plot for 3D points
     p = fullfile(results_path, strcat('3dpts_', num2str(i), '.csv'));
     csvwrite(p, res);
-    scatter3(res(:, 1), res(:, 2), res(:, 3));
-    hold on;
-    
-    % Draw line through the plot - TODO: should fit a smooth curve
-    plot3(res(:, 1), res(:, 2), res(:, 3));
-    hold on;
-
-%     xi = smooth(res(:, 1));
-%     yi = smooth(res(:, 2));
-%     zi = smooth(res(:, 3));
-%     plot3(xi, yi, zi, 'r') ;
-    
-    % Plot the table at lowest z value (hack) - should actually pick the
-    % first local minima for z (this occurs for bounce on table)
-%     [x y] = meshgrid(-2:0.1:2);
-%     tableHeight = min(res(:, 3));
-%     s = surf(x, y, tableHeight + zeros(size(x)));
-    xlim([-1 2])
-    ylim([-2.5 2.5])
-    zlim([-0.5 1.5])
-    print(figH, '-djpeg', strcat('traj_', num2str(i), '.jpg'));
-    
-    smooth = smoothdata(res, 1, 'sgolay', 5);
-    plot3(smooth(:, 1), smooth(:, 2), smooth(:, 3));
+    scatter3(res(:, 1), res(:, 2), res(:, 3), 'MarkerEdgeColor', [0 0 0.5]);
     hold on;
     
     % Plot the table 
-    [x y] = meshgrid(-2:0.1:2);
+    [x, y] = meshgrid(-2:0.1:2);
     tableHeight = 0.09;
     s = surf(x, y, tableHeight + zeros(size(x)));
+    set(s,'EdgeColor','None', 'FaceColor', [0.8 0.8 0.8])
+    hold on;
     
     % Set axes limits
     xlim([-1 2])
     ylim([-2.5 2.5])
     zlim([-0.5 1.5])
     
-    % Store trajectory
+    title('Trajectory');
+    
+    figName = strcat('Trajectory of Ball for Sequence: ', num2str(i));
+    set(figH, 'NumberTitle', 'off', 'Name', figName);
+    
+    % Save figure as .jpg
     p = fullfile(results_path, strcat('traj_', num2str(i), '.jpg'));
     print(figH, '-djpeg', p);
-
+    
+    % Plot best fit line with deviation
+    plotErrorVisualization(i, res, results_path);
 end
 
 % Implement triangulation
