@@ -6,7 +6,7 @@
 %   xPositions ():
 %   yPositions ():
 %   Writes csv file to disk containing coordinates of the ball
-function [xPositions, yPositions] = processVideoFile(videoFilename)
+function [xPositions, yPositions] = processVideoFile(videoFilename, cam)
 fprintf("In function processVideoFile()\n");
 
 
@@ -43,7 +43,6 @@ else
     fprintf("Loading background from disk\n");
     videoBackground = double(imread(backgroundFile)); 
 end
-hasDipped = false;
 
 for frameNum = 1 : 100
     % Read video frame and convert to image
@@ -54,7 +53,7 @@ for frameNum = 1 : 100
     % diff = uint8(movingObjects);
     movingObjectsGrayscale = rgb2gray(uint8(movingObjects));
 
-    [x, y] = getBallPosition(movingObjectsGrayscale);
+    [x, y] = getBallPosition(movingObjectsGrayscale, cam);
     
     
     xPositions(end+1) = x;
@@ -71,7 +70,7 @@ for frameNum = 1 : 100
         posCsvEntry = strcat(int2str(frameNum-1), DELIMITER, x, DELIMITER, y, '\n');
     end
     
-    %fprintf(posCsvEntry);
+    fprintf(posCsvEntry);
     fprintf(csvFileObj,posCsvEntry);
     
     % TODO: Stop tracking after ball bounces

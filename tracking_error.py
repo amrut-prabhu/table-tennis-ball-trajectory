@@ -30,13 +30,12 @@ def calculate_tracking_error(truthFile, resultFile, videoId):
 
 
 numProcessedFiles = 0;
-truthDir = "./Actual";
-z = 0;
+truthDir = os.path.join('.', 'Actual');
 
-for camNum in [1, 2, 3]:
-    resultDir = "./Videos/CAM" + str(camNum);
+for camNum in [2]:
+    resultDir = os.path.join('.', 'Videos', 'CAM' + str(camNum));
     for file in os.listdir(resultDir):
-        if file.endswith(".csv") and z == 0:
+        if file.endswith(".csv"):
             pathToResultFile = os.path.join(resultDir, file);
 
             videoId = file.split(".")[0];
